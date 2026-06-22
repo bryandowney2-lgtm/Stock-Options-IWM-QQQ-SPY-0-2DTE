@@ -83,9 +83,12 @@ def score_relative_strength(u: Underlying, all_momos: list[float]) -> float:
 
 def score_premium_value(u: Underlying, contract: OptionContract) -> float:
     """Cheap implied vol vs realized scores higher (better for buying premium).
-    Ratio realized/implied: >1 means implied is cheap relative to recent moves."""
-    if contract.iv <= 0:
-        return 0.3
+    Ratio realized/implied: >1 means implied is cheap relative to recent moves.
+
+    Guards the degenerate case: if IV is below the sanity floor the quote is
+    broken (expired/stale), not 'cheap' — score it neutral-low, never high."""
+    if contract.iv < C.MIN_IV:
+        return 0.2
     ratio = u.realized_vol / contract.iv
     # map ratio 0.5..1.5 onto 0..1, clip outside
     return float(np.clip((ratio - 0.5), 0, 1))
@@ -126,7 +129,8 @@ def pick_contract(u: Underlying, chain: list[OptionContract],
     for c in chain:
         if c.kind != side:
             continue
-        if c.iv <= 0 or c.mid <= 0:
+        # drop degenerate quotes: no IV floor met, or no real market
+        if c.iv < C.MIN_IV or c.mid <= 0:
             continue
         c.delta = bs_delta(u.spot, c.strike, t_years, c.iv, c.kind, C.RISK_FREE_RATE)
         candidates.append(c)
@@ -141,12 +145,15 @@ def pick_contract(u: Underlying, chain: list[OptionContract],
               and c.volume >= C.MIN_VOLUME]
     pool = liquid if liquid else candidates
 
-    # drop pinned extremes (delta ~0 or ~1 carry no directional/gamma value)
+    # drop pinned extremes (delta ~0 or ~1 carry no directional/gamma value).
+    # if EVERYTHING is pinned, the chain is degenerate (e.g. 0DTE at expiry) —
+    # return None so the screener reports "no tradeable chain" instead of
+    # emitting a junk deep-ITM pick.
     in_band = [c for c in pool if 0.05 < abs(c.delta) < 0.95]
-    if in_band:
-        pool = in_band
+    if not in_band:
+        return None
 
-    return min(pool, key=lambda c: abs(abs(c.delta) - C.TARGET_DELTA))
+    return min(in_band, key=lambda c: abs(abs(c.delta) - C.TARGET_DELTA))
 
 
 # ---------- composite ----------

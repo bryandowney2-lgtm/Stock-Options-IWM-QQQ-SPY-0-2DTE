@@ -66,8 +66,16 @@ def run():
         signals.append(build_signal(u, contract, expiry, all_momos))
 
     if not signals:
-        print("No signals generated.", file=sys.stderr)
-        sys.exit(1)
+        msg = ("No tradeable chains right now. This usually means the run "
+               "happened outside market hours or on a chain at/after expiry "
+               "(IV collapsed, deltas pinned). Re-run during the session.")
+        print(msg, file=sys.stderr)
+        if C.EMIT_MARKDOWN:
+            import datetime as _dt
+            with open(C.MARKDOWN_PATH, "w") as f:
+                f.write(f"# 0-2 DTE Index ETF Signal — "
+                        f"{_dt.datetime.now():%Y-%m-%d %H:%M}\n\n_{msg}_\n")
+        return  # clean exit — not a failure
 
     signals.sort(key=lambda s: s.composite, reverse=True)
 
