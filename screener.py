@@ -49,7 +49,18 @@ def run():
             print(f"[warn] {sym}: no expiry in {C.MIN_DTE}-{C.MAX_DTE} DTE window",
                   file=sys.stderr)
             continue
-        expiry = valid[0]  # nearest qualifying
+
+        # After the ET cutoff, prefer >=1 DTE (skip the late-day 0DTE cliff),
+        # but fall back to 0DTE if that's the only thing available.
+        expiry = valid[0]  # default: nearest qualifying
+        if C.AVOID_0DTE_AFTER_ET_HOUR is not None:
+            from datetime import datetime
+            from zoneinfo import ZoneInfo
+            et_hour = datetime.now(ZoneInfo("America/New_York")).hour
+            if et_hour >= C.AVOID_0DTE_AFTER_ET_HOUR:
+                later = [e for e in valid if _dte(e) >= 1]
+                if later:
+                    expiry = later[0]
 
         try:
             chain = provider.get_chain(sym, expiry)
