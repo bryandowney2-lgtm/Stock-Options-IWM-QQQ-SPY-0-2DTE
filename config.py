@@ -29,6 +29,11 @@ MAX_SPREAD_PCT = 15.0          # bid/ask spread as % of mid
 MIN_OPEN_INTEREST = 100
 MIN_VOLUME = 10
 
+# ---- data-sanity floor ----
+# Below this IV a quote is treated as degenerate (expired/stale chain),
+# not "cheap premium". Contracts under it are dropped, not scored.
+MIN_IV = 0.02                  # 2% — anything lower is broken data, not signal
+
 # ---- bars used for momentum / realized vol ----
 BAR_PERIOD = "5d"
 BAR_INTERVAL = "15m"
