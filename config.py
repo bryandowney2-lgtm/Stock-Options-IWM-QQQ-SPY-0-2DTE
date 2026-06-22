@@ -10,6 +10,12 @@ PROVIDER = "yfinance"          # see data_providers/__init__.py
 MIN_DTE = 0
 MAX_DTE = 2
 
+# ---- expiry preference ----
+# After this hour (ET), skip same-day 0DTE and prefer the nearest expiry >= 1 DTE.
+# Late-day 0DTE has a sharp delta cliff and little runway, so favor 1DTE instead.
+# Set to None to always pick the nearest qualifying expiry regardless of time.
+AVOID_0DTE_AFTER_ET_HOUR = 13   # 1pm ET
+
 # ---- factor weights (must sum to 1.0) ----
 # Profile: LEAN DIRECTIONAL — momentum carries the score.
 WEIGHTS = {
