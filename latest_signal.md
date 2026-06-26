@@ -1,15 +1,15 @@
-# 0-2 DTE Index ETF Signal — 2026-06-25 21:01
+# 0-2 DTE Index ETF Signal — 2026-06-26 19:24
 
 _Pre-market/open setup tool. yfinance data is delayed — confirm on the live tape before entering. Not trade advice._
 
 | Rank | Contract | Side | Score | Spot | Δ | IV | Mid | Spread | OI | Vol | Liquid |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | QQQ 2026-06-26 715P | PUT | 0.727 | 716.26 | -0.44 | 20.8% | 3.70 | 1.9% | 6797 | 41894 | yes |
-| 2 | IWM 2026-06-26 299C | CALL | 0.604 | 298.84 | +0.49 | 21.5% | 1.83 | 2.2% | 8312 | 9397 | yes |
-| 3 | SPY 2026-06-26 733P | PUT | 0.493 | 733.27 | -0.47 | 12.8% | 2.16 | 0.9% | 12265 | 68315 | yes |
+| 1 | QQQ 2026-06-26 709P | PUT | 0.726 | 708.86 | -0.53 | 10.2% | 1.64 | 1.8% | 3545 | 175783 | yes |
+| 2 | SPY 2026-06-26 732P | PUT | 0.533 | 732.13 | -0.45 | 6.9% | 1.02 | 1.0% | 11816 | 543788 | yes |
+| 3 | IWM 2026-06-26 297P | PUT | 0.443 | 296.74 | -0.68 | 7.1% | 0.58 | 3.4% | 2840 | 74325 | yes |
 
 ## Factor breakdown
 
-1. **QQQ 2026-06-26 715P** — directional_bias: 0.31, relative_strength: 1.00, premium_value: 0.94, liquidity: 0.92, strike_quality: 0.92
-2. **IWM 2026-06-26 299C** — directional_bias: 0.25, relative_strength: 0.89, premium_value: 0.55, liquidity: 0.91, strike_quality: 0.72
-3. **SPY 2026-06-26 733P** — directional_bias: 0.29, relative_strength: 0.03, premium_value: 0.71, liquidity: 0.96, strike_quality: 0.86
+1. **QQQ 2026-06-26 709P** — directional_bias: 0.41, relative_strength: 1.00, premium_value: 1.00, liquidity: 0.93, strike_quality: 0.49
+2. **SPY 2026-06-26 732P** — directional_bias: 0.24, relative_strength: 0.04, premium_value: 1.00, liquidity: 0.96, strike_quality: 0.99
+3. **IWM 2026-06-26 297P** — directional_bias: 0.17, relative_strength: 0.31, premium_value: 1.00, liquidity: 0.86, strike_quality: 0.00
